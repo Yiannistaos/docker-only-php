@@ -1,0 +1,25 @@
+version: "3"
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports: 
+      - 80:80
+      - 443:443
+    networks:
+      - docker_only_php
+    depends_on:
+      - php
+    volumes:
+      - ./src/:/var/www/html/
+      - ./logs/nginx:/var/log/nginx/
+  php:
+    image: php:fpm-alpine
+    networks:
+      - docker_only_php
+    volumes:
+      - ./src/:/var/www/html
+networks:
+  docker_only_php:
+    driver: bridge
